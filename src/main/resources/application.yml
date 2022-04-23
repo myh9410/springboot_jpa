@@ -1,0 +1,14 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    open-in-view: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  datasource:
+    board:
+      hostname: localhost
+      username: root
+      password: moon9494
