@@ -19,9 +19,12 @@ import java.time.LocalDateTime;
 public class Board {
 
     @Id
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "no")
     private long no;
 
+    @Setter
     @Column
     private String title;
 
@@ -36,6 +39,7 @@ public class Board {
     @CreationTimestamp
     @NotNull
     @Column(name = "reg_date")
+    @Builder.Default
     private LocalDateTime regDate;
 
     private int status;

@@ -26,4 +26,6 @@ public class RandomHelper {
     public static Long randomLong(){
         return (long) ThreadLocalRandom.current().nextInt(100, 100 + 1);
     }
+
+    public static boolean randomBoolean() {return ThreadLocalRandom.current().nextBoolean(); }
 }

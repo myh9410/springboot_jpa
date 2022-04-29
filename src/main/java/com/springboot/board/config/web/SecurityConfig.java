@@ -19,7 +19,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/health/**");
+        web.ignoring().antMatchers(
+                "/health/**","/board/**",
+                "/swagger-ui/**","/swagger-resources/**","/webjars/**","/v2/api-docs",
+                "/swagger-ui.html","/configuration/ui","/swagger-resources","/configuration/security","/swagger/**");
     }
 
     @Override
@@ -31,7 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
 
                 .authorizeRequests().antMatchers(
-                        "/health", "/board/**"
+                        "/health", "/board/**",
+                        "/swagger-ui/**","/swagger-resources/**","/webjars/**","/v2/api-docs",
+                        "/swagger-ui.html","/configuration/ui","/swagger-resources","/configuration/security","/swagger/**"
                 ).permitAll();
     }
 
