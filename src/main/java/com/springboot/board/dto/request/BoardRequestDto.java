@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -23,4 +24,7 @@ public class BoardRequestDto {
     @ApiModelProperty(value = "비밀게시글 여부", required = true)
     @Valid
     private Boolean isPrivate;
+
+    @ApiModelProperty(value = "등록 시간", required = false)
+    private LocalDateTime regDate;
 }

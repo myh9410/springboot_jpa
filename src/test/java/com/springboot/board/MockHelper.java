@@ -1,15 +1,16 @@
 package com.springboot.board;
 
+import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
 
+import java.time.LocalDateTime;
+
 public class MockHelper {
-    public static Board getMockBoard() {
-        return Board.builder()
-                .no(RandomHelper.randomLong())
+    public static BoardRequestDto getMockBoard() {
+        return BoardRequestDto.builder()
                 .title(RandomHelper.randomString())
                 .content(RandomHelper.randomString())
-                .status(RandomHelper.randomInt())
+                .regDate(LocalDateTime.now())
                 .build();
-
     }
 }

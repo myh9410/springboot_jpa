@@ -2,22 +2,31 @@ package com.springboot.board.service;
 
 import com.springboot.board.MockHelper;
 import com.springboot.board.RandomHelper;
+import com.springboot.board.dto.BoardResultDto;
+import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
 import com.springboot.board.repository.BoardRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class BoardServiceTest {
+
+    @InjectMocks
+    private BoardService boardService;
 
     @Mock
     private BoardRepository boardRepository;
@@ -27,74 +36,30 @@ public class BoardServiceTest {
     public void findBoardByNo() {
 
         //given
-        Board mockBoard = MockHelper.getMockBoard();
-
-        doReturn(
-                Optional.of(
-                        mockBoard
-                )
-        ).when(boardRepository).findByNo(mockBoard.getNo());
+        BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
+        Board board = boardService.generateBoardInfo(boardRequestDto);
+        given(boardRepository.findByNo(board.getNo())).willReturn(Optional.of(board));
 
         //when
-        Optional<Board> optionalBoard = boardRepository.findByNo(mockBoard.getNo());
+        boardRepository.findByNo(board.getNo());
 
         //then
-        optionalBoard.ifPresent(board -> assertEquals(mockBoard.getNo(), board.getNo()));
-        optionalBoard.ifPresent(board -> assertEquals(mockBoard.getTitle(), board.getTitle()));
-        optionalBoard.ifPresent(board -> assertEquals(mockBoard.getContent(), board.getContent()));
-        optionalBoard.ifPresent(board -> assertEquals(mockBoard.getStatus(), board.getStatus()));
+        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(board.getNo());
 
     }
 
     @DisplayName("게시판 등록 테스트")
     @Test
     public void postBoard() {
-
         //given
-        Board board = MockHelper.getMockBoard();
+        BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
+        Board board = boardService.generateBoardInfo(boardRequestDto);
+        given(boardRepository.save(board)).willReturn(Optional.of(board).get());
 
         //when
-        Board returnBoard = boardRepository.save(board);
-        Optional<Board> optionalBoard = boardRepository.findByNo(board.getNo());
+        boardService.createBoard(board);
 
         //then
-        optionalBoard.ifPresent(ob -> assertSame(returnBoard, ob));
-
-    }
-
-    @DisplayName("게시판 수정 테스트")
-    @Test
-    public void putBoard() {
-
-        //given
-        Board randomBoard = MockHelper.getMockBoard();
-        Board returnBoard = boardRepository.save(randomBoard);
-
-        //when
-        Optional<Board> optionalBoard = boardRepository.findByNo(returnBoard.getNo());
-
-        //then
-        optionalBoard.ifPresent(board -> {
-            board.setTitle(RandomHelper.randomString());
-            board.setContent(RandomHelper.randomString());
-            board.setIsPrivate(RandomHelper.randomBoolean());
-
-            boardRepository.save(board);
-        });
-
-    }
-
-    @DisplayName("게시판 삭제 테스트")
-    @Test
-    public void deleteBoard() {
-        //given
-        Board board = MockHelper.getMockBoard();
-
-        //when
-        boardRepository.save(board);
-
-        //then
-        boardRepository.deleteById(board.getNo());
-
+        Mockito.verify(boardRepository, Mockito.times(1)).save(board);
     }
 }

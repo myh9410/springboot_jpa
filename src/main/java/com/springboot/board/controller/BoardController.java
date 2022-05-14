@@ -2,6 +2,7 @@ package com.springboot.board.controller;
 
 import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.dto.BoardResultDto;
+import com.springboot.board.entity.Board;
 import com.springboot.board.exception.BoardException;
 import com.springboot.board.service.BoardService;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +44,10 @@ public class BoardController {
     @PostMapping(value = "/board")
     public ResponseEntity<BoardResultDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
         try {
-            BoardResultDto boardResultDto = boardService.createBoard(boardRequestDto);
+
+            Board board = boardService.generateBoardInfo(boardRequestDto);
+
+            BoardResultDto boardResultDto = boardService.createBoard(board);
 
             return new ResponseEntity<>(boardResultDto, HttpStatus.OK);
         } catch (Exception e) {

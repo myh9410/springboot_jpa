@@ -39,7 +39,6 @@ public class Board {
     @CreationTimestamp
     @NotNull
     @Column(name = "reg_date")
-    @Builder.Default
     private LocalDateTime regDate;
 
     private int status;

@@ -40,9 +40,7 @@ public class BoardService {
         }
     }
 
-    public BoardResultDto createBoard(BoardRequestDto boardRequestDto) {
-
-        Board board = generateBoardInfo(boardRequestDto);
+    public BoardResultDto createBoard(Board board) {
 
         Board insertResultBoard = boardRepository.save(board);
 
@@ -81,12 +79,12 @@ public class BoardService {
         boardRepository.deleteById(no);
     }
 
-    private Board generateBoardInfo(BoardRequestDto boardRequestDto) {
+    public Board generateBoardInfo(BoardRequestDto boardRequestDto) {
         return Board.builder()
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
                 .isPrivate(boardRequestDto.getIsPrivate())
-                .regDate(LocalDateTime.now())
+                .regDate(boardRequestDto.getRegDate() != null ? boardRequestDto.getRegDate() : LocalDateTime.now())
                 .status(0)
                 .build();
     }
