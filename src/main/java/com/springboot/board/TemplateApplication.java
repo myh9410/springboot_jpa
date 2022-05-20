@@ -9,9 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TemplateApplication {
 
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
-
     public static void main(String[] args) {
         SpringApplication.run(TemplateApplication.class, args);
     }
