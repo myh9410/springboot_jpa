@@ -10,5 +10,5 @@ spring:
   datasource:
     board:
       hostname: localhost
-      username: root
-      password: moon9494
+      username: root      #보통 직접 value 값을 할당하지 않고, KMS를 활용해서 build 하는 등의 방식으로 설정
+      password: moon9494  #보통 직접 value 값을 할당하지 않고, KMS를 활용해서 build 하는 등의 방식으로 설정
