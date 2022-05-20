@@ -1,9 +1,9 @@
 package com.springboot.board.controller;
 
 import com.springboot.board.dto.request.BoardRequestDto;
-import com.springboot.board.dto.BoardResultDto;
+import com.springboot.board.dto.BoardResponseDto;
 import com.springboot.board.entity.Board;
-import com.springboot.board.exception.BoardException;
+import com.springboot.board.exception.BoardNotFoundException;
 import com.springboot.board.service.BoardService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -20,71 +22,65 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @ApiOperation(value = "게시글 조회")
+    @ApiOperation(value = "게시글 단일 조회")
     @ApiResponses({
-            @ApiResponse(code = 200, response = BoardResultDto.class, message = ""),
-            @ApiResponse(code = 500, response = BoardException.class, message = "")
+            @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
     })
     @GetMapping("/boards/{no}")
-    public ResponseEntity<BoardResultDto> getBoard(@PathVariable Long no) {
-        try {
-            BoardResultDto boardResultDto = boardService.getBoard(no);
+    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long no) {
+        BoardResponseDto boardResponseDto = boardService.getBoardByNoOrThrowBoardNotFoundException(no);
 
-            return new ResponseEntity<>(boardResultDto, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BoardException(e);
-        }
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "전체 게시글 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, response = List.class, message = ""),
+            @ApiResponse(code = 500, response = List.class, message = "")
+    })
+    @GetMapping("/boards")
+    public ResponseEntity<List<BoardResponseDto>> getAllBoard() {
+        List<BoardResponseDto> list = boardService.getBoards();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @ApiOperation(value = "게시글 등록")
     @ApiResponses({
-            @ApiResponse(code = 200, response = BoardResultDto.class, message = ""),
-            @ApiResponse(code = 500, response = BoardException.class, message = "")
+            @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
     })
     @PostMapping(value = "/board")
-    public ResponseEntity<BoardResultDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
-        try {
+    public ResponseEntity<BoardResponseDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
+        Board board = boardService.generateBoardInfo(boardRequestDto);
 
-            Board board = boardService.generateBoardInfo(boardRequestDto);
+        BoardResponseDto boardResponseDto = boardService.createBoard(board);
 
-            BoardResultDto boardResultDto = boardService.createBoard(board);
-
-            return new ResponseEntity<>(boardResultDto, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BoardException(e);
-        }
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "게시글 수정")
+    @ApiOperation(value = "게시글 단일 수정")
     @ApiResponses({
-            @ApiResponse(code = 200, response = BoardResultDto.class, message = ""),
-            @ApiResponse(code = 500, response = BoardException.class, message = "")
+            @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
     })
     @PutMapping(value = "/boards/{no}")
-    public ResponseEntity<BoardResultDto> putBoard(@RequestBody BoardRequestDto boardRequestDto, @PathVariable Long no) {
-        try {
-            BoardResultDto boardResultDto = boardService.putBoard(boardRequestDto, no);
+    public ResponseEntity<BoardResponseDto> putBoard(@RequestBody BoardRequestDto boardRequestDto, @PathVariable Long no) {
+        BoardResponseDto boardResponseDto = boardService.putBoard(boardRequestDto, no);
 
-            return new ResponseEntity<>(boardResultDto, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BoardException(e);
-        }
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
     @ApiOperation(value = "게시글 삭제")
     @ApiResponses({
             @ApiResponse(code = 200, response = ResponseEntity.class, message = "SUCCESS"),
-            @ApiResponse(code = 500, response = BoardException.class, message = "")
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
     })
     @DeleteMapping(value = "/boards/{no}")
     public ResponseEntity<String> deleteBoard(@PathVariable Long no) {
-        try {
-            boardService.deleteBoard(no);
+        boardService.deleteBoard(no);
 
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BoardException(e);
-        }
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 
 }

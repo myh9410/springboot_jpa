@@ -1,16 +1,20 @@
 package com.springboot.board.service;
 
-import com.springboot.board.dto.BoardResultDto;
+import com.springboot.board.dto.BoardResponseDto;
 import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
+import com.springboot.board.exception.BoardNotFoundException;
 import com.springboot.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,60 +23,39 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public BoardResultDto getBoard(Long no) {
+    public BoardResponseDto getBoardByNoOrThrowBoardNotFoundException(Long no) {
 
         Optional<Board> optionalBoardInfoDto = boardRepository.findByNo(no);
 
-        optionalBoardInfoDto.ifPresent(board -> BoardResultDto.builder().no(board.getNo()).title(board.getTitle()).content(board.getContent()).build());
-
-        if (optionalBoardInfoDto.isPresent()) {
-            return BoardResultDto.builder()
-                    .no(no)
-                    .title(optionalBoardInfoDto.get().getTitle())
-                    .content(optionalBoardInfoDto.get().getContent())
-                    .build();
-        } else {
-            return BoardResultDto.builder()
-                    .no(no)
-                    .title("")
-                    .content("")
-                    .build();
-        }
+        return new BoardResponseDto(optionalBoardInfoDto.orElseThrow(() -> new BoardNotFoundException("not found")));
     }
 
-    public BoardResultDto createBoard(Board board) {
+    public List<BoardResponseDto> getBoards() {
+
+        List<Board> list =  boardRepository.findAll();
+
+        return list.stream().map(BoardResponseDto::new).collect(Collectors.toList());
+    }
+
+    public BoardResponseDto createBoard(Board board) {
 
         Board insertResultBoard = boardRepository.save(board);
 
-        return BoardResultDto.builder()
-                .no(insertResultBoard.getNo())
-                .title(insertResultBoard.getTitle())
-                .content(insertResultBoard.getContent())
-                .build();
+        return new BoardResponseDto(insertResultBoard);
     }
 
-    public BoardResultDto putBoard(BoardRequestDto boardRequestDto, Long no) {
+    public BoardResponseDto putBoard(BoardRequestDto boardRequestDto, Long no) {
         Optional<Board> optionalBoard = boardRepository.findByNo(no);
 
-        Board curBoard;
+        Board curBoard = optionalBoard.orElseThrow(() -> new BoardNotFoundException("nothing to update"));
 
-        if (optionalBoard.isPresent()) {
-            curBoard = optionalBoard.get();
+        curBoard.setTitle(boardRequestDto.getTitle());
+        curBoard.setContent(boardRequestDto.getContent());
+        curBoard.setIsPrivate(boardRequestDto.getIsPrivate());
 
-            curBoard.setTitle(boardRequestDto.getTitle());
-            curBoard.setContent(boardRequestDto.getContent());
-            curBoard.setIsPrivate(boardRequestDto.getIsPrivate());
+        Board modifyResultBoard = boardRepository.save(curBoard);
 
-            boardRepository.save(curBoard);
-        } else {
-            throw new NoSuchElementException();
-        }
-
-        return BoardResultDto.builder()
-                .no(curBoard.getNo())
-                .title(curBoard.getTitle())
-                .content(curBoard.getContent())
-                .build();
+        return new BoardResponseDto(modifyResultBoard);
     }
 
     public void deleteBoard(Long no) {

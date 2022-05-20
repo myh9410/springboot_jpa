@@ -1,9 +1,9 @@
 package com.springboot.board.exception;
 
-public class BoardException extends RuntimeException {
+public class BoardNotFoundException extends RuntimeException {
 
-    public BoardException(Throwable cause) {
-        super(cause);
+    public BoardNotFoundException(String message) {
+        super(message);
 
     }
 
