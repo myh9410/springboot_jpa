@@ -2,7 +2,6 @@ package com.springboot.board.service;
 
 import com.springboot.board.MockHelper;
 import com.springboot.board.RandomHelper;
-import com.springboot.board.dto.BoardResultDto;
 import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
 import com.springboot.board.repository.BoardRepository;
@@ -14,12 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,35 +28,47 @@ public class BoardServiceTest {
     @Mock
     private BoardRepository boardRepository;
 
-    @DisplayName("게시판 조회 테스트")
+    @DisplayName("게시판 조회 서비스 테스트 - service layer에서 repository.findByNo 정상 호출 테스트")
     @Test
-    public void findBoardByNo() {
+    public void findBoardByNoServiceTest() {
 
         //given
+        Long no = RandomHelper.randomLong();
         BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
-        Board board = boardService.generateBoardInfo(boardRequestDto);
-        given(boardRepository.findByNo(board.getNo())).willReturn(Optional.of(board));
+        Board board = generateBoardByMockRequestDto(boardRequestDto);
+        given(boardRepository.findByNo(no)).willReturn(Optional.of(board));
 
         //when
-        boardRepository.findByNo(board.getNo());
+        boardService.getBoardByNoOrThrowBoardNotFoundException(no);
 
         //then
-        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(board.getNo());
+        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(no);
 
     }
 
-    @DisplayName("게시판 등록 테스트")
+    @DisplayName("게시판 생성 테스트 - service layer에서 repository.save 정상 호출 테스트")
     @Test
-    public void postBoard() {
+    public void createBoardServiceTest() {
+
         //given
         BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
-        Board board = boardService.generateBoardInfo(boardRequestDto);
-        given(boardRepository.save(board)).willReturn(Optional.of(board).get());
+        Board board = boardRequestDto.toEntity();
+        given(boardRepository.save(board)).willReturn(board);
 
         //when
         boardService.createBoard(board);
 
         //then
         Mockito.verify(boardRepository, Mockito.times(1)).save(board);
+    }
+
+    private Board generateBoardByMockRequestDto(BoardRequestDto boardRequestDto) {
+        return Board.builder()
+                .title(boardRequestDto.getTitle())
+                .content(boardRequestDto.getContent())
+                .isPrivate(boardRequestDto.getIsPrivate())
+                .regDate(boardRequestDto.getRegDate())
+                .status(0)
+                .build();
     }
 }
