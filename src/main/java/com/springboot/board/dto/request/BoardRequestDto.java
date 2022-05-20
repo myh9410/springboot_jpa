@@ -1,5 +1,6 @@
 package com.springboot.board.dto.request;
 
+import com.springboot.board.entity.Board;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -27,4 +28,13 @@ public class BoardRequestDto {
 
     @ApiModelProperty(value = "등록 시간", required = false)
     private LocalDateTime regDate;
+
+    public Board toEntity() {
+        return Board.builder()
+                .title(this.title)
+                .content(this.content)
+                .isPrivate(this.isPrivate)
+                .regDate(this.regDate)
+                .build();
+    }
 }

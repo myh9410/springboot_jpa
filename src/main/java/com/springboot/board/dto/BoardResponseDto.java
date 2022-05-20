@@ -1,12 +1,13 @@
 package com.springboot.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springboot.board.entity.Board;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class BoardResultDto {
+public class BoardResponseDto {
     private Long no;
 
     private String title;
@@ -17,9 +18,9 @@ public class BoardResultDto {
     private int status;
 
     @Builder
-    public BoardResultDto(Long no, String title, String content) {
-        this.no = no;
-        this.title = title;
-        this.content = content;
+    public BoardResponseDto(Board board) {
+        this.no = board.getNo();
+        this.title = board.getTitle();
+        this.content = board.getContent();
     }
 }
