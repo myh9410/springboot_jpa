@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class BoardServiceTest {
@@ -60,6 +61,44 @@ public class BoardServiceTest {
 
         //then
         Mockito.verify(boardRepository, Mockito.times(1)).save(board);
+    }
+
+    @DisplayName("게시판 수정 테스트 - service layer에서 repository.findByNo 및 repository.save 정상 호출 테스트")
+    @Test
+    public void putBoardServiceTest() {
+
+        //given
+        BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
+        Board board = boardRequestDto.toEntity();
+        Long no = board.getNo();
+
+        given(boardRepository.findByNo(no)).willReturn(Optional.of(board));
+        given(boardRepository.save(board)).willReturn(board);
+
+        //when
+        boardService.putBoard(boardRequestDto, no);
+
+        //then
+        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(no);
+        Mockito.verify(boardRepository, Mockito.times(1)).save(board);
+    }
+
+    @DisplayName("게시판 삭제 테스트 - service layer에서 repository.deleteById 정상 호출 테스트")
+    @Test
+    public void deleteBoardServiceTest() {
+
+        //given
+        BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
+        Board board = boardRequestDto.toEntity();
+        Long no = board.getNo();
+
+        doNothing().when(boardRepository).deleteById(no);
+
+        //when
+        boardService.deleteBoard(no);
+
+        //then
+        Mockito.verify(boardRepository, Mockito.times(1)).deleteById(no);
     }
 
     private Board generateBoardByMockRequestDto(BoardRequestDto boardRequestDto) {
