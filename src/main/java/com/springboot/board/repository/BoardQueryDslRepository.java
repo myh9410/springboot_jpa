@@ -26,4 +26,10 @@ public class BoardQueryDslRepository {
                 .fetch();
     }
 
+    public Board findByNo(Long no) {
+        return queryFactory.selectFrom(board)
+                .where(board.no.eq(no))
+                .fetchOne();
+    }
+
 }

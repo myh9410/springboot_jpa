@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final BoardQueryDslRepository boardQueryDslRepository;
 
     public BoardResponseDto getBoardByNoOrThrowBoardNotFoundException(Long no) {
 
@@ -35,12 +34,6 @@ public class BoardService {
     public List<BoardResponseDto> getBoards() {
 
         List<Board> list =  boardRepository.findAll();
-
-        return list.stream().map(BoardResponseDto::new).collect(Collectors.toList());
-    }
-
-    public List<BoardResponseDto> getBoardsByQueryDsl() {
-        List<Board> list = boardQueryDslRepository.findAll();
 
         return list.stream().map(BoardResponseDto::new).collect(Collectors.toList());
     }

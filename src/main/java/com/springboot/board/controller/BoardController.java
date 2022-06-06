@@ -45,17 +45,6 @@ public class BoardController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "전체 게시글 조회 - querydsl")
-    @ApiResponses({
-            @ApiResponse(code = 200, response = List.class, message = ""),
-            @ApiResponse(code = 500, response = List.class, message = "")
-    })
-    @GetMapping("/querydsl/boards")
-    public ResponseEntity<List<BoardResponseDto>> getAllBoardByQueryDsl() {
-        List<BoardResponseDto> list = boardService.getBoardsByQueryDsl();
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
     @ApiOperation(value = "게시글 등록")
     @ApiResponses({
             @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
