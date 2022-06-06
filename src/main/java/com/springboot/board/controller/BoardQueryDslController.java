@@ -1,6 +1,8 @@
 package com.springboot.board.controller;
 
 import com.springboot.board.dto.BoardResponseDto;
+import com.springboot.board.dto.request.BoardRequestDto;
+import com.springboot.board.entity.Board;
 import com.springboot.board.exception.BoardNotFoundException;
 import com.springboot.board.service.BoardQueryDslService;
 import io.swagger.annotations.ApiOperation;
@@ -9,10 +11,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +43,29 @@ public class BoardQueryDslController {
     public ResponseEntity<List<BoardResponseDto>> getAllBoardByQueryDsl() {
         List<BoardResponseDto> list = boardService.getBoardsByQueryDsl();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "게시글 단일 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
+    })
+    @PutMapping(value = "/boards/{no}")
+    public ResponseEntity<BoardResponseDto> putBoard(@RequestBody BoardRequestDto boardRequestDto, @PathVariable Long no) {
+        BoardResponseDto boardResponseDto = boardService.putBoard(boardRequestDto, no);
+
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "게시글 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, response = ResponseEntity.class, message = "SUCCESS"),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
+    })
+    @DeleteMapping(value = "/boards/{no}")
+    public ResponseEntity<String> deleteBoard(@PathVariable Long no) {
+        boardService.deleteBoard(no);
+
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 }

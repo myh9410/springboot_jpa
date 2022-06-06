@@ -6,6 +6,7 @@ import com.springboot.board.entity.QBoard;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -30,6 +31,23 @@ public class BoardQueryDslRepository {
         return queryFactory.selectFrom(board)
                 .where(board.no.eq(no))
                 .fetchOne();
+    }
+
+    @Transactional
+    public long update(Long no, Board input) {
+        return queryFactory.update(board)
+                .set(board.title, input.getTitle())
+                .set(board.content, input.getContent())
+                .set(board.isPrivate, input.getIsPrivate())
+                .where(board.no.eq(no))
+                .execute();
+    }
+
+    @Transactional
+    public long deleteByNo(Long no) {
+        return queryFactory.delete(board)
+                .where(board.no.eq(no))
+                .execute();
     }
 
 }
