@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest //@SpringBootTest는 실제 DataSourceConfiguration을 활용하여 테스트를 진행하게 된다.
-@Transactional  //실제 DB 활용을 방지하기 위하여 @Transactional을 추가한다.
+@Transactional  //실제 DB에 데이터가 추가,수정,삭제 되는 것을 방지하기 위하여 @Transactional을 추가한다.
 @Import(DataSourceConfiguration.class)
 public class BoardRepositoryTest {
 
