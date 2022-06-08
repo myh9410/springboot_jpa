@@ -1,25 +1,24 @@
 package com.springboot.board.repository;
 
 import com.springboot.board.MockHelper;
-import com.springboot.board.RandomHelper;
 import com.springboot.board.config.persistence.DataSourceConfiguration;
-import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest //@SpringBootTest는 실제 DataSourceConfiguration을 활용하여 테스트를 진행하게 된다.
+@Transactional  //실제 DB 활용을 방지하기 위하여 @Transactional을 추가한다.
 @Import(DataSourceConfiguration.class)
 public class BoardRepositoryTest {
 
