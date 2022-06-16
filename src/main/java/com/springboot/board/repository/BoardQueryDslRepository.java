@@ -33,7 +33,6 @@ public class BoardQueryDslRepository {
                 .fetchOne();
     }
 
-    @Transactional
     public long update(Long no, Board input) {
         return queryFactory.update(board)
                 .set(board.title, input.getTitle())
@@ -43,7 +42,6 @@ public class BoardQueryDslRepository {
                 .execute();
     }
 
-    @Transactional
     public long deleteByNo(Long no) {
         return queryFactory.delete(board)
                 .where(board.no.eq(no))

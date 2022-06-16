@@ -5,9 +5,11 @@ import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
 import com.springboot.board.exception.BoardNotFoundException;
 import com.springboot.board.repository.BoardQueryDslRepository;
+import com.springboot.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class BoardQueryDslService {
 
     private final BoardQueryDslRepository boardQueryDslRepository;
+    private final BoardRepository boardRepository;
 
     public BoardResponseDto getBoardByNo(Long no) {
         try {
@@ -37,6 +40,15 @@ public class BoardQueryDslService {
         return list.stream().map(BoardResponseDto::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public BoardResponseDto createBoard(Board board) {
+
+        Board insertResultBoard = boardRepository.save(board);
+
+        return new BoardResponseDto(insertResultBoard);
+    }
+
+    @Transactional
     public BoardResponseDto putBoard(BoardRequestDto boardRequestDto, Long no) {
         long updateNo = boardQueryDslRepository.update(no, boardRequestDto.toEntity());
 
@@ -45,6 +57,7 @@ public class BoardQueryDslService {
         return new BoardResponseDto(board);
     }
 
+    @Transactional
     public void deleteBoard(Long no) {
         boardQueryDslRepository.deleteByNo(no);
     }

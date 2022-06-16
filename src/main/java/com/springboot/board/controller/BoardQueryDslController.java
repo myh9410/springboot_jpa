@@ -45,6 +45,20 @@ public class BoardQueryDslController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
+            @ApiResponse(code = 500, response = BoardNotFoundException.class, message = "")
+    })
+    @PostMapping(value = "/board")
+    public ResponseEntity<BoardResponseDto> postBoard(@RequestBody BoardRequestDto boardRequestDto) {
+        Board board = boardService.generateBoardInfo(boardRequestDto);
+
+        BoardResponseDto boardResponseDto = boardService.createBoard(board);
+
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "게시글 단일 수정")
     @ApiResponses({
             @ApiResponse(code = 200, response = BoardResponseDto.class, message = ""),
