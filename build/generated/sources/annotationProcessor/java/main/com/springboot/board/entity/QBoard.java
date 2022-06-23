@@ -21,7 +21,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath content = createString("content");
 
-    public final BooleanPath isPrivate = createBoolean("isPrivate");
+    public final EnumPath<com.springboot.board.dto.enums.YorN> isPrivate = createEnum("isPrivate", com.springboot.board.dto.enums.YorN.class);
 
     public final NumberPath<Long> no = createNumber("no", Long.class);
 

@@ -1,5 +1,6 @@
 package com.springboot.board.entity;
 
+import com.springboot.board.dto.enums.YorN;
 import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +32,10 @@ public class Board {
     @Setter
     private String content;
 
-    @Builder.Default
     @Setter
     @Column(name = "is_private")
-    private Boolean isPrivate = false;
+    @Enumerated(EnumType.STRING)
+    private YorN isPrivate;
 
     @CreationTimestamp
     @NotNull
@@ -42,4 +43,18 @@ public class Board {
     private LocalDateTime regDate;
 
     private int status;
+}
+
+@Converter
+class BooleanToYNConverter implements AttributeConverter<Boolean, String> {
+
+    @Override
+    public String convertToDatabaseColumn(Boolean attribute) {
+        return (attribute != null && attribute) ? "Y" : "N";
+    }
+
+    @Override
+    public Boolean convertToEntityAttribute(String dbData) {
+        return "Y".equals(dbData);
+    }
 }
