@@ -6,7 +6,6 @@ import com.springboot.board.entity.QBoard;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
