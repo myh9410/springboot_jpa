@@ -1,16 +1,13 @@
 package com.springboot.board.entity;
 
-import com.querydsl.core.annotations.PropertyType;
-import com.querydsl.core.annotations.QueryType;
 import com.springboot.board.converter.BooleanToStringConverter;
 import com.springboot.board.dto.enums.YorN;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.persistence.*;
 
 @Slf4j
 @Getter

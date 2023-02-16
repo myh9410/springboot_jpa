@@ -3,10 +3,10 @@ package com.springboot.board.dto.request;
 import com.springboot.board.dto.enums.YorN;
 import com.springboot.board.entity.Board;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -3,9 +3,9 @@ package com.springboot.board.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.board.entity.Board;
 import com.springboot.board.entity.QBoard;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
