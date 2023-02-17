@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Profile("!test")
 @Configuration
@@ -29,7 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
 
                 .requestMatchers(
-                        "/health", "/board/**",
+                        "/health", "/board/**","/boards/**",
                         "/swagger-ui/**","/swagger-resources/**","/webjars/**","/v2/api-docs",
                         "/swagger-ui.html","/configuration/ui","/swagger-resources","/configuration/security","/swagger/**"
                 )
@@ -38,18 +35,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
-    }
-
 }
