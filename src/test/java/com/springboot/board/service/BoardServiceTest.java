@@ -4,7 +4,7 @@ import com.springboot.board.MockHelper;
 import com.springboot.board.RandomHelper;
 import com.springboot.board.dto.request.BoardRequestDto;
 import com.springboot.board.entity.Board;
-import com.springboot.board.repository.BoardRepository;
+import com.springboot.board.repository.board.BoardRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,13 +35,13 @@ public class BoardServiceTest {
         Long no = RandomHelper.randomLong();
         BoardRequestDto boardRequestDto = MockHelper.getMockBoard();
         Board board = generateBoardByMockRequestDto(boardRequestDto);
-        given(boardRepository.findByNo(no)).willReturn(Optional.of(board));
+        given(boardRepository.findById(no)).willReturn(Optional.of(board));
 
         //when
         boardService.getBoardByNoOrThrowBoardNotFoundException(no);
 
         //then
-        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(no);
+        Mockito.verify(boardRepository, Mockito.times(1)).findById(no);
 
     }
 
@@ -70,14 +70,14 @@ public class BoardServiceTest {
         Board board = boardRequestDto.toEntity();
         Long no = board.getNo();
 
-        given(boardRepository.findByNo(no)).willReturn(Optional.of(board));
+        given(boardRepository.findById(no)).willReturn(Optional.of(board));
         given(boardRepository.save(board)).willReturn(board);
 
         //when
         boardService.putBoard(boardRequestDto, no);
 
         //then
-        Mockito.verify(boardRepository, Mockito.times(1)).findByNo(no);
+        Mockito.verify(boardRepository, Mockito.times(1)).findById(no);
         Mockito.verify(boardRepository, Mockito.times(1)).save(board);
     }
 
