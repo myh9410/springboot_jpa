@@ -1,33 +1,33 @@
-package com.springboot.board.repository;
+package com.springboot.board.repository.board;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.springboot.board.dto.BoardDto;
+import com.springboot.board.dto.QBoardDto;
 import com.springboot.board.entity.Board;
-import com.springboot.board.entity.QBoard;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+import static com.springboot.board.entity.QBoard.board;
+
 @Repository
-public class BoardQueryDslRepository {
+public class BoardCustomRepositoryImpl implements BoardCustomRepository {
 
-    private final EntityManager entityManager;
-
-    private final QBoard board = QBoard.board;
     private final JPAQueryFactory queryFactory;
 
-    public BoardQueryDslRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public BoardCustomRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public List<Board> findAll() {
-        return queryFactory.selectFrom(board)
+    public List<BoardDto> findAllBoards() {
+        return queryFactory.select(new QBoardDto(board.no, board.title, board.content, board.status))
+                .from(board)
                 .fetch();
     }
 
-    public Board findByNo(Long no) {
-        return queryFactory.selectFrom(board)
+    public BoardDto findBoardByNo(Long no) {
+        return queryFactory.select(new QBoardDto(board.no, board.title, board.content, board.status))
+                .from(board)
                 .where(board.no.eq(no))
                 .fetchOne();
     }
