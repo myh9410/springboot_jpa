@@ -28,11 +28,8 @@ public class JpaService {
 
     @Transactional
     public void addCount() {
-        Optional<Posts> optionalPosts = postRepository.findById(1L);
+        Posts posts = postRepository.findByIdForUpdate(1L);
 
-        if (optionalPosts.isEmpty()) throw new NullPointerException("null error");
-
-        Posts posts = optionalPosts.get();
         long likes = posts.getLikes();
         posts.setLikes(likes+1);
         postRepository.save(posts);
