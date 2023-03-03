@@ -1,12 +1,25 @@
 plugins {
     id 'org.springframework.boot' version '3.0.2'
     id "io.spring.dependency-management" version "1.1.0"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
     id 'java'
 }
 
 sourceCompatibility = '19'
 group 'com.springboot.template'
 version '1.0-SNAPSHOT'
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into 'BOOT-INF/classes/static/docs'
+    }
+}
 
 repositories {
     mavenCentral()
@@ -16,7 +29,7 @@ dependencies {
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'mysql:mysql-connector-java'
@@ -31,9 +44,30 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
+    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+asciidoctor {
+    dependsOn test
+    inputs.dir snippetsDir
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
 test {
-//    useJUnitPlatform()
+    useJUnitPlatform()
+    outputs.dir snippetsDir
 }

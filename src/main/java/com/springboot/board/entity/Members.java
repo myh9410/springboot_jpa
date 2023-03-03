@@ -35,6 +35,7 @@ public class Members {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
+    @Builder.Default
     private List<Orders> orders = new ArrayList<>();
 
 }
