@@ -2,10 +2,13 @@ package com.springboot.board.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
@@ -16,6 +19,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@ExtendWith({RestDocumentationExtension.class})
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 public class BoardControllerTest {
@@ -28,12 +32,12 @@ public class BoardControllerTest {
     public void getHealth() throws Exception {
         mockMvc.perform(get("/health"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("status").value("OK"))
                 .andDo(
                         document(
                             "health",
                             responseFields(
-                                fieldWithPath("status").description("OK")
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("OK")
                             )
                         )
                 );
