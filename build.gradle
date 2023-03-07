@@ -52,9 +52,11 @@ ext {
 }
 
 openapi3 {
+    server = "http://localhost:8080"
     title = "jpa_test"
     outputDirectory = "."
     outputFileNamePrefix = "swagger"
+    format = 'yaml'
 }
 
 test {
