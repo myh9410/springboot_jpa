@@ -1,8 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version '3.0.1'
     id "io.spring.dependency-management" version "1.1.0"
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id "com.epages.restdocs-api-spec" version "0.16.2"
+    id "com.epages.restdocs-api-spec" version "0.17.1"
     id 'java'
 }
 
@@ -42,13 +42,10 @@ dependencies {
 
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
-    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
-    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-ext {
-    snippetsDir = file('build/generated-snippets')
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.17.1'
+    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
 }
 
 openapi3 {
@@ -73,4 +70,8 @@ test {
             into "static/docs"
         }
     }
+}
+
+bootJar {
+    enabled = false
 }
