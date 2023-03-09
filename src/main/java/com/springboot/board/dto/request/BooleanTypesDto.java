@@ -11,7 +11,7 @@ public class BooleanTypesDto {
 
     private boolean varBool;
 
-    private YorN varEnum;
+    private boolean varEnum;
 
     private boolean varChar;
 

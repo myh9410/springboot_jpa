@@ -22,7 +22,7 @@ public class BooleanTypeService {
         BooleanTypes booleanTypes = BooleanTypes.builder()
                 .no(1L)
                 .inputBool(booleanTypesDto.isVarBool())
-                .inputEnum(booleanTypesDto.getVarEnum())
+                .inputEnum(booleanTypesDto.isVarEnum())
                 .inputChar(booleanTypesDto.isVarChar())
                 .build();
 

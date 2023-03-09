@@ -1,6 +1,7 @@
 package com.springboot.board.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.springboot.board.dto.enums.YorN;
 import com.springboot.board.dto.request.BooleanTypesDto;
 import com.springboot.board.entity.BooleanTypes;
 import com.springboot.board.entity.QBooleanTypes;
@@ -20,7 +21,7 @@ public class BooleanTypesQueryDslRepository {
     public long update(BooleanTypesDto booleanTypesDto) {
         return jpaQueryFactory.update(qBooleanTypes)
                 .set(qBooleanTypes.col_boolean, booleanTypesDto.isVarBool())
-                .set(qBooleanTypes.col_enum, booleanTypesDto.getVarEnum())
+                .set(qBooleanTypes.col_enum, booleanTypesDto.isVarEnum() ? YorN.Y : YorN.N)
                 .set(qBooleanTypes.col_char, booleanTypesDto.isVarChar())
                 .where(qBooleanTypes.no.eq(1L))
                 .execute();
