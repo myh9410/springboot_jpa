@@ -57,14 +57,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
     }
 
     @Override
-    public List<MemberDto> findMemberByNoWithPaging(long no, Pageable pageable) {
+    public List<MemberDto> findMembersWithPaging(Pageable pageable) {
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiersOfMember(pageable);
 
         return queryFactory
                 .from(members)
+                .offset(pageable.getOffset()+1)
+                .limit(pageable.getPageSize())
                 .leftJoin(members.orders, orders)
-                .where(members.no.eq(no))
                 .orderBy(ORDERS.toArray(OrderSpecifier[]::new))
                 .transform(
                         groupBy(members.no).list(
