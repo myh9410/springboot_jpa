@@ -3,12 +3,12 @@ package com.springboot.board.controller;
 import com.springboot.board.dto.MemberDto;
 import com.springboot.board.service.JpaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +27,7 @@ public class JpaController {
     }
 
     @GetMapping("/members")
-    public List<MemberDto> getMember(Pageable pageable) {
+    public Page<MemberDto> getMember(Pageable pageable) {
         return jpaService.getMembersByPage(pageable);
     }
 

@@ -5,6 +5,8 @@ import com.springboot.board.entity.Posts;
 import com.springboot.board.repository.members.MemberRepository;
 import com.springboot.board.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +28,10 @@ public class JpaService {
         return memberDtoList.get(0);
     }
 
-    public List<MemberDto> getMembersByPage(Pageable pageable) {
+    public Page<MemberDto> getMembersByPage(Pageable pageable) {
         List<MemberDto> memberDtoList = memberRepository.findMembersWithPaging(pageable);
 
-        return memberDtoList;
+        return new PageImpl<>(memberDtoList, pageable, memberDtoList.size());
     }
 
     @Transactional
