@@ -1,6 +1,5 @@
 package com.springboot.board.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import com.springboot.board.dto.enums.Status;
 import lombok.*;
 
@@ -19,12 +18,4 @@ public class OrderDto {
     private LocalDateTime orderDate;
 
     private Status status;
-
-//    @QueryProjection
-//    public OrderDto(long no, String orderNum, LocalDateTime orderDate, Status status) {
-//        this.no = no;
-//        this.orderNum = orderNum;
-//        this.orderDate = orderDate;
-//        this.status = status;
-//    }
 }
