@@ -50,7 +50,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                                 orders.orderNum,
                                 orders.orderDate,
                                 orders.status
-                            )).as("orders")
+                            ).skipNulls()).as("orders")
                         )
                     )
                 );
@@ -81,7 +81,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                                                 orders.orderNum,
                                                 orders.orderDate,
                                                 orders.status
-                                        )).as("orders")
+                                        ).skipNulls()).as("orders")
                                 )
                         )
                 );
