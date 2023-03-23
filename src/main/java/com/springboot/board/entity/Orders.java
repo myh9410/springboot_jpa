@@ -21,8 +21,9 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long no;
 
-    @Column(name = "member_no")
-    private long memberNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_no")
+    private Members member;
 
     @Column(name = "order_num")
     private String orderNum;

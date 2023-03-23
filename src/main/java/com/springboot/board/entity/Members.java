@@ -33,8 +33,7 @@ public class Members {
     @Enumerated(STRING)
     private YorN active;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_no")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Orders> orders = new ArrayList<>();
 
