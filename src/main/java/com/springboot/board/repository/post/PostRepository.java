@@ -18,4 +18,9 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     })
     Posts findByIdForUpdate(@Param("id") long id);
 
+
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select p from posts p where p.no = :id")
+    Posts findByIdWithOptimisticLock(@Param("id") long id);
+
 }

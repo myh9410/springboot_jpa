@@ -38,9 +38,17 @@ public class JpaService {
     public void addCount() {
         Posts posts = postRepository.findByIdForUpdate(1L);
 
-        long likes = posts.getLikes();
-        posts.setLikes(likes+1);
+        posts.increaseByOne();
         postRepository.save(posts);
     }
 
+    @Transactional
+    public void decreaseCount() {
+        Posts posts = postRepository.findByIdWithOptimisticLock(1L);
+
+        long likes = posts.getLikes();
+
+        posts.decreaseByOne();
+        postRepository.saveAndFlush(posts);
+    }
 }

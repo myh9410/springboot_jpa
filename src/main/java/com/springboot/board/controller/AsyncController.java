@@ -15,7 +15,7 @@ public class AsyncController {
 
     @GetMapping("/not-same-thread")
     public void notSameThreadAsync() throws InterruptedException {
-        System.out.println(Thread.currentThread().getName()+":"+Thread.currentThread().threadId()+":controller");
+        System.out.println(Thread.currentThread().getName()+":"+Thread.currentThread().getId()+":controller");
         for (int i = 1; i <= 10; i++) {
             asyncService.asyncTest(i);
         }

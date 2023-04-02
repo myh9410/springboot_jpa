@@ -25,4 +25,15 @@ public class Posts {
 
     private String title;
 
+    public void decreaseByOne() {
+        if (this.likes -1 < 0) {
+            throw new RuntimeException("감소할 수 없습니다. (likes 0 이하)");
+        }
+
+        this.likes -= 1;
+    }
+
+    public void increaseByOne() {
+        this.likes +=1;
+    }
 }
