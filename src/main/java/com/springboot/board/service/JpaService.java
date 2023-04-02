@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -42,13 +43,12 @@ public class JpaService {
         postRepository.save(posts);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void decreaseCount() {
         Posts posts = postRepository.findByIdWithOptimisticLock(1L);
 
-        long likes = posts.getLikes();
-
         posts.decreaseByOne();
+
         postRepository.saveAndFlush(posts);
     }
 }

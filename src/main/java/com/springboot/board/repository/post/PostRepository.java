@@ -23,4 +23,10 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     @Query("select p from posts p where p.no = :id")
     Posts findByIdWithOptimisticLock(@Param("id") long id);
 
+    @Query(value = "select get_lock(:key, 3000)", nativeQuery = true)
+    void getLock(String key);
+
+    @Query(value = "select release_lock(:key)", nativeQuery = true)
+    void releaseLock(String key);
+
 }
