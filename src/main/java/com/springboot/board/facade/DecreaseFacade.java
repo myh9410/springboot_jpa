@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DecreaseFacade {
 
-    private JpaService jpaService;
+    private final JpaService jpaService;
 
+    //optimistic lock을 사용한 decrease 처리
     public void decrease() throws InterruptedException {
         while (true) {
             try {
-                jpaService.decreaseCount();
+                jpaService.decreaseCountOptimistic();
 
                 break;
             } catch (Exception e) {

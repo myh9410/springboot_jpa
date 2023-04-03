@@ -11,22 +11,24 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Posts, Long> {
 
+    @Query("select p from posts p where p.no = :id")
+    Posts findByIdForUpdate(@Param("id") long id);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from posts p where p.no = :id")
     @QueryHints({
         @QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")
     })
-    Posts findByIdForUpdate(@Param("id") long id);
-
+    Posts findByIdWithPessimisticLock(@Param("id") long id);
 
     @Lock(LockModeType.OPTIMISTIC)
     @Query("select p from posts p where p.no = :id")
     Posts findByIdWithOptimisticLock(@Param("id") long id);
 
-    @Query(value = "select get_lock(:key, 3000)", nativeQuery = true)
-    void getLock(String key);
+    @Query(value = "select get_lock(:key, 1000)", nativeQuery = true)
+    int getLock(long key);
 
     @Query(value = "select release_lock(:key)", nativeQuery = true)
-    void releaseLock(String key);
+    int releaseLock(long key);
 
 }
