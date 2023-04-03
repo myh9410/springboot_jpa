@@ -16,13 +16,14 @@ public class NamedLockFacade {
     @Transactional
     public void decrease() {
         try {
-            int result = postRepository.getLock(1L);
+            Integer result = postRepository.getLock(1L);
             System.out.println("get-lock : " + result);
             jpaService.decreaseCountNamed();
         } catch (Exception e) {
             System.out.println("try fail");
+            e.printStackTrace();
         } finally {
-            int result = postRepository.releaseLock(1L);
+            Integer result = postRepository.releaseLock(1L);
             System.out.println("release-lock : " + result);
         }
     }
