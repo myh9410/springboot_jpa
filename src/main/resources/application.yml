@@ -18,8 +18,8 @@ spring:
       username: root      #보통 직접 value 값을 할당하지 않고, KMS를 활용해서 build 하는 등의 방식으로 설정
       password: moon9494  #보통 직접 value 값을 할당하지 않고, KMS를 활용해서 build 하는 등의 방식으로 설정
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 20
+      maximum-pool-size: 11
+      minimum-idle: 10
 logging:
   level:
     com.zaxxer.hikari.HikariConfig: DEBUG

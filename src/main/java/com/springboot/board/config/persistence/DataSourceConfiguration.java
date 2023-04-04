@@ -3,6 +3,7 @@ package com.springboot.board.config.persistence;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,7 @@ public class DataSourceConfiguration {
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource boardDataSource(DbProperties dbProperties, JpaProperties jpaProperties) throws InvalidPropertiesFormatException {
         dbProperties = getValidDbProperties(dbProperties, jpaProperties);
 

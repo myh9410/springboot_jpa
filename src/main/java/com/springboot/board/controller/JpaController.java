@@ -23,7 +23,7 @@ public class JpaController {
     private final DecreaseFacade decreaseFacade;
     private final NamedLockFacade namedLockFacade;
     private static final int NUMBER_OF_THREADS = 100;
-    private static final ExecutorService service = Executors.newFixedThreadPool(32);
+    private static final ExecutorService service = Executors.newFixedThreadPool(10);
 
     @GetMapping("/members/{no}")
     public MemberDto getMember(@PathVariable long no) {
@@ -73,9 +73,26 @@ public class JpaController {
 
         CountDownLatch latch = new CountDownLatch(10);
 
-        //9개까지는 잘 도는데 10개부터 잘 안돌아감
+        /**
+         * connection-pool로 인한 Dead Lock 발생건
+         *
+         * 이슈 : default connection pool size로 설정했을 때 아래 코드가 1~9까지는 잘 도는데 1~10부터는 안돌고 계속 pending 걸려있음
+         *
+         * 원인 :
+         * hikari default pool size가 10 > multi-thread에서 각 thread마다 get_lock으로 connection 1개씩 사용해서 pool size를 다 사용하게 됨.
+         * lock을 선점한 thread에서 데이터에 대한 수정 - decreaseCountNamed()을 해야되는데 남은 connection이 connection pool에 없음.
+         * >> 계속 pending 걸려잇다가 CannotCreateTransactionException 발생
+         *      HikariPool-1 - Pool stats (total=10, active=10, idle=0, waiting=1) -> 왜 waiting이 1개 있지?
+         *      CannotCreateTransactionException : Could not open JPA EntityManager for transaction
+         * Pool-Size = 최대 쓰레드 수 * (하나의 쓰레드가 작업을 수행하기 위해 필요한 DB 커넥션 수 -1) + 1 만큼을 권장한다.
+         *
+         * 해결 :
+         * @ConfigurationProperties(prefix = "spring.datasource.hikari") DataSourceConfiguration에 property로
+         * maximum-pool-size로 최대 늘어날 수 있는 pool-size를 위 공식 참고하여 설정해줌
+         *
+         */
         //named lock도 분산 서버 환경에서는 이슈가 생길 수 있음
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             service.execute(() -> {
                 namedLockFacade.decrease();
                 latch.countDown();
